@@ -1,0 +1,41 @@
+{
+  "manifest_version": 2,
+  "name": "Line Graphs for YouTube Live Chat",
+  "version": "0.1.0",
+  "description": "YouTube Liveのアーカイブ視聴画面にチャット送信数の線グラフを表示するChrome拡張機能．",
+  "icons": {
+    "16": "images/sample_icon16.png",
+    "32": "images/sample_icon32.png",
+    "48": "images/sample_icon48.png",
+    "128": "images/sample_icon128.png"
+  },
+  "page_action": {
+    "default_icon": {
+      "16": "images/sample_icon16.png",
+      "32": "images/sample_icon32.png",
+      "48": "images/sample_icon48.png",
+      "128": "images/sample_icon128.png"
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "js": [
+        "src/js/content.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "src/js/background.js"
+    ],
+    "persistent": false
+  }
+}
