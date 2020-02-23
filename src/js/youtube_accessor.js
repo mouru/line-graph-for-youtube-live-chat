@@ -6,9 +6,9 @@
  * @throws An error message to be shown that there is no a player element.
  */
 function getPlayerElement() {
-  const player = document.getElementById('player');
-  existElement(player);
-  return player;
+  const playerElem = document.getElementById('player');
+  existElement(playerElem);
+  return playerElem;
 }
 
 /**
@@ -20,16 +20,11 @@ function getPlayerElement() {
  *  tag.
  */
 function getVideoWidth() {
-  // the video tag to be extracted is reached by the following hierarchy
-  // <div id="movie_player"> -> <div class="html5-video-container"> -> <video>
-  const moviePlayer = document.getElementById('movie_player');
-  existElement(moviePlayer);
-  const videoContainer = moviePlayer.getElementsByClassName('html5-video-container');
-  isValidElementCollection(videoContainer, 'html5-video-container');
-  const video = videoContainer[0].getElementsByTagName('video');
-  isValidElementCollection(video, 'video');
+  const idName = 'movie_player';
+  const classNames = ['html5-video-container', 'video'];
+  const videoElem = digHTMLTags(idName, classNames);
 
-  return video[0].style.width;
+  return videoElem.style.width;
 }
 
 /**
@@ -41,14 +36,11 @@ function getVideoWidth() {
  *  progress bar.
  */
 function getProgressBarWidth() {
-  // the div tag to be extracted is reached by the following hierarchy
-  // <div id="movie_player"> -> <div class="ytp-chrome-bottom">
-  const moviePlayer = document.getElementById('movie_player');
-  existElement(moviePlayer);
-  const ytpChromeBottom = moviePlayer.getElementsByClassName('ytp-chrome-bottom');
-  isValidElementCollection(ytpChromeBottom, 'ytp-chrome-bottom');
+  const idName = 'movie_player';
+  const classNames = ['ytp-chrome-bottom'];
+  const ytpChromeBottomElem = digHTMLTags(idName, classNames);
 
-  return ytpChromeBottom[0].style.width;
+  return ytpChromeBottomElem.style.width;
 }
 
 /**
@@ -60,28 +52,45 @@ function getProgressBarWidth() {
  *  time duration element.
  */
 function getTimeDuration() {
-  // the div tag to be extracted is reached by the following hierarchy
-  const moviePlayer = document.getElementById('movie_player');
-  existElement(moviePlayer);
-  const ytpChromeBottom = moviePlayer.getElementsByClassName('ytp-chrome-bottom');
-  isValidElementCollection(ytpChromeBottom, 'ytp-chrome-bottom');
-  const ytpChromeControls = ytpChromeBottom[0].getElementsByClassName('ytp-chrome-controls');
-  isValidElementCollection(ytpChromeControls, 'ytp-chrome-controls');
-  const ytpLeftControls = ytpChromeControls[0].getElementsByClassName('ytp-left-controls');
-  isValidElementCollection(ytpLeftControls, 'ytp-left-controls');
-  const ytpTimeDisplay = ytpLeftControls[0].getElementsByClassName('ytp-time-display');
-  isValidElementCollection(ytpTimeDisplay, 'ytp-time-display');
-  const ytpTimeDuration = ytpTimeDisplay[0].getElementsByClassName('ytp-time-duration');
-  isValidElementCollection(ytpTimeDuration, 'ytp-time-duration');
+  const idName = 'movie_player';
+  const classNames = ['ytp-chrome-bottom', 'ytp-chrome-controls',
+    'ytp-left-controls', 'ytp-time-display', 'ytp-time-duration'];
+  const ytpTimeDurationElem = digHTMLTags(idName, classNames);
 
-  return ytpTimeDuration[0].innerHTML;
+  return ytpTimeDurationElem.innerHTML;
+}
+
+/**
+ * Returns an element to be dug by the specified id and classNames.
+ *
+ * @param {string} idName An id to be shown the starting element.
+ * @param {string[]} classNames ClassNames to dig a document.
+ * @returns {Element} An element to be dug.
+ * @throws An error message to be shown that the specified id and classNames
+ *  cannot dig a document.
+ */
+function digHTMLTags(idName, classNames) {
+  // get the starting element by id
+  const idElem = document.getElementById(idName);
+  existElement(idElem, idName);
+
+  // dig tags by classNames
+  let classCollection = idElem.getElementsByClassName(classNames[0]);
+  isValidElementCollection(classCollection, classNames[0]);
+  for (let i = 1; i < classNames.length; i++) {
+    const className = classNames[i];
+    classCollection = classCollection[0].getElementsByClassName(className);
+    isValidElementCollection(classCollection, className);
+  }
+
+  return classCollection[0];
 }
 
 /**
  * Check whether the specified htmlElement exists (i.e., NULL) or not.
  *
  * @param {HtmlElement} htmlElement an element to be checked.
- * @param {String} idName a tag string to be shown an exception message.
+ * @param {string} idName a tag string to be shown an exception message.
  * @throws An error message to be shown that there is no a specified tag.
  */
 function existElement(htmlElement, idName) {
@@ -95,7 +104,7 @@ function existElement(htmlElement, idName) {
  * are multiple elements, log a warning message.
  *
  * @param {HTMLCollectionOf} htmlCollection a collection to be checked.
- * @param {String} className a tag string to be shown an exception message.
+ * @param {string} className a tag string to be shown an exception message.
  * @throws An error message to be shown that there is no a specified class.
  */
 function isValidElementCollection(htmlCollection, className) {
