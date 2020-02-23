@@ -33,6 +33,25 @@ function getVideoWidth() {
 }
 
 /**
+ *  Returns a string specifying the width of a progress bar
+ *  (format: "<width>px", e.g., "463px").
+ *
+ * @returns {string} A string specifying the width of a progress bar.
+ * @throws An error message to be shown that the function cannot reach a
+ *  progress bar.
+ */
+function getProgressBarWidth() {
+  // the div tag to be extracted is reached by the following hierarchy
+  // <div id="movie_player"> -> <div class="ytp-chrome-bottom">
+  const moviePlayer = document.getElementById('movie_player');
+  existElement(moviePlayer);
+  const ytpChromeBottom = moviePlayer.getElementsByClassName('ytp-chrome-bottom');
+  isValidElementCollection(ytpChromeBottom, 'ytp-chrome-bottom');
+
+  return ytpChromeBottom[0].style.width;
+}
+
+/**
  * Check whether the specified htmlElement exists (i.e., NULL) or not.
  *
  * @param {HtmlElement} htmlElement an element to be checked.
