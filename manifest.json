@@ -19,8 +19,7 @@
   },
   "permissions": [
     "activeTab",
-    "declarativeContent",
-    "storage"
+    "declarativeContent"
   ],
   "content_scripts": [
     {
@@ -28,7 +27,8 @@
         "https://www.youtube.com/*"
       ],
       "js": [
-        "src/js/content.js"
+        "src/js/content.js",
+        "src/js/youtube_accessor.js"
       ]
     }
   ],

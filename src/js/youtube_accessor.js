@@ -6,8 +6,9 @@
  * @throws An error message to be shown that there is no a player element.
  */
 function getPlayerElement() {
-  const playerElem = document.getElementById('player');
-  existElement(playerElem);
+  const idName = 'player';
+  const playerElem = document.getElementById(idName);
+  existElement(playerElem, idName);
   return playerElem;
 }
 
@@ -21,7 +22,7 @@ function getPlayerElement() {
  */
 function getVideoWidth() {
   const idName = 'movie_player';
-  const classNames = ['html5-video-container', 'video'];
+  const classNames = ['html5-video-container', 'html5-main-video'];
   const videoElem = digHTMLTags(idName, classNames);
 
   return videoElem.style.width;
@@ -108,7 +109,7 @@ function digHTMLTags(idName, classNames) {
  * @throws An error message to be shown that there is no a specified tag.
  */
 function existElement(htmlElement, idName) {
-  if (htmlElement) {
+  if (!htmlElement) {
     throw 'Cannot find a ' + idName + ' element.';
   }
 }
@@ -125,6 +126,6 @@ function isValidElementCollection(htmlCollection, className) {
   if (htmlCollection.length == 0) {
     throw 'Cannot find a ' + className + ' element.';
   } else if (htmlCollection.length > 1) {
-    console.console.warn('There are multiple ' + className + 'elements.');
+    console.warn('There are multiple ' + className + 'elements.');
   }
 }

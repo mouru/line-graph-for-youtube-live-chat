@@ -5,7 +5,13 @@ chrome.runtime.onInstalled.addListener(function () {
         pageUrl: { hostEquals: 'www.youtube.com' },
       })
       ],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
+      actions: [
+        new chrome.declarativeContent.ShowPageAction()
+      ]
     }]);
   });
+});
+
+chrome.pageAction.onClicked.addListener(function (tab) {
+  chrome.tabs.sendMessage(tab.id, { action: 'test-functions' }, function (responce) { });
 });
