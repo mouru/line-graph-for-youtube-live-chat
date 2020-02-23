@@ -61,6 +61,20 @@ function getTimeDuration() {
 }
 
 /**
+ * Returns a chat log URL.
+ *
+ * @returns {string} A URL to get chat logs.
+ * @throws An error message to be shown that there is no a chatframe element.
+ */
+function getChatLogURL() {
+  const idName = 'chatframe';
+  const chatframeElem = document.getElementById(idName);
+  existElement(chatframeElem, idName);
+
+  return chatframeElem.src;
+}
+
+/**
  * Returns an element to be dug by the specified id and classNames.
  *
  * @param {string} idName An id to be shown the starting element.
