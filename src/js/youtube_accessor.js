@@ -52,6 +52,32 @@ function getProgressBarWidth() {
 }
 
 /**
+ * Returns a string specifying the time duration of a video (format:
+ * "hh:mm:ss", e.g., "1:01:38").
+ *
+ * @returns {string} A string specifying the time duration of a video.
+ * @throws An error message to be shown that the function cannot reach a
+ *  time duration element.
+ */
+function getTimeDuration() {
+  // the div tag to be extracted is reached by the following hierarchy
+  const moviePlayer = document.getElementById('movie_player');
+  existElement(moviePlayer);
+  const ytpChromeBottom = moviePlayer.getElementsByClassName('ytp-chrome-bottom');
+  isValidElementCollection(ytpChromeBottom, 'ytp-chrome-bottom');
+  const ytpChromeControls = ytpChromeBottom[0].getElementsByClassName('ytp-chrome-controls');
+  isValidElementCollection(ytpChromeControls, 'ytp-chrome-controls');
+  const ytpLeftControls = ytpChromeControls[0].getElementsByClassName('ytp-left-controls');
+  isValidElementCollection(ytpLeftControls, 'ytp-left-controls');
+  const ytpTimeDisplay = ytpLeftControls[0].getElementsByClassName('ytp-time-display');
+  isValidElementCollection(ytpTimeDisplay, 'ytp-time-display');
+  const ytpTimeDuration = ytpTimeDisplay[0].getElementsByClassName('ytp-time-duration');
+  isValidElementCollection(ytpTimeDuration, 'ytp-time-duration');
+
+  return ytpTimeDuration[0].innerHTML;
+}
+
+/**
  * Check whether the specified htmlElement exists (i.e., NULL) or not.
  *
  * @param {HtmlElement} htmlElement an element to be checked.
