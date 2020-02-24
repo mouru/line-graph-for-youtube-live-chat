@@ -48,7 +48,7 @@ function getProgressBarWidth() {
  * Returns a string specifying the time duration of a video (format:
  * "hh:mm:ss", e.g., "1:01:38").
  *
- * @returns {string} A string specifying the time duration of a video.
+ * @returns {number} The time duration of a video in second.
  * @throws An error message to be shown that the function cannot reach a
  *  time duration element.
  */
@@ -58,7 +58,7 @@ function getTimeDuration() {
     'ytp-left-controls', 'ytp-time-display', 'ytp-time-duration'];
   const ytpTimeDurationElem = digHTMLTags(idName, classNames);
 
-  return ytpTimeDurationElem.innerHTML;
+  return convertTimeDurationToSecond(ytpTimeDurationElem.innerHTML);
 }
 
 /**
@@ -73,6 +73,26 @@ function getChatLogURL() {
   existElement(chatframeElem, idName);
 
   return chatframeElem.src;
+}
+
+/**
+ * Returns the specified time duration to be shown in second
+ *
+ * @param {string} timeDuration Time duration of a video.
+ * @returns {number} Time duration in second.
+ */
+function convertTimeDurationToSecond(timeDuration) {
+  const hhmmss = timeDuration.split(':');
+  if (hhmmss.length == 2) {
+    const mm = parseInt(hhmmss[0], 10);
+    const ss = parseInt(hhmmss[1], 10);
+    return mm * 60 + ss;
+  } else {
+    const hh = parseInt(hhmmss[0], 10);
+    const mm = parseInt(hhmmss[1], 10);
+    const ss = parseInt(hhmmss[2], 10);
+    return (hh * 60 + mm) * 60 + ss;
+  }
 }
 
 /**
