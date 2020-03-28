@@ -6,10 +6,10 @@
  * @throws An error message to be shown that there is no a player element.
  */
 function getPlayerElement() {
-  const idName = 'player';
+  const idName = 'player-container-outer';
   const playerElem = document.getElementById(idName);
   existElement(playerElem, idName);
-  return playerElem;
+  return playerElem.parentElement;
 }
 
 /**

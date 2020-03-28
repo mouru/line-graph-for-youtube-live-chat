@@ -28,7 +28,9 @@
       ],
       "js": [
         "src/js/content.js",
-        "src/js/youtube_accessor.js"
+        "src/js/youtube_accessor.js",
+        "src/js/draw_line_graph.js",
+        "lib/chartjs/Chart.min.js"
       ]
     }
   ],
