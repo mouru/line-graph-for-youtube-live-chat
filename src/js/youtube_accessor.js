@@ -76,6 +76,36 @@ function getChatLogURL() {
 }
 
 /**
+ * Return a chat-log URL based on reloadContinuationData to count chats from the
+ * start point of video.
+ *
+ * @param {string} chatLogURL an original chat-log URL
+ * @returns {Promise<string>} a chat-log URL based on the current position of a
+ * seek bar
+ * @throws
+ */
+async function getChatURLOnVideoStart(chatLogURL) {
+  const response = await fetch(chatLogURL);
+  const responseText = await response.text();
+  const domparser = new DOMParser();
+  const chatDoc = domparser.parseFromString(responseText, 'text/html');
+  const jsonText = chatDoc.body.getElementsByTagName('script').item(5).innerText.slice(31, -4);
+  const chatJson = JSON.parse(jsonText);
+  const continuation = chatJson.
+    continuationContents.
+    liveChatContinuation.
+    header.
+    liveChatHeaderRenderer.
+    viewSelector.
+    sortFilterSubMenuRenderer.
+    subMenuItems[0].
+    continuation.
+    reloadContinuationData.
+    continuation;
+  return 'https://www.youtube.com/live_chat_replay?continuation=' + continuation;
+}
+
+/**
  * Returns the specified time duration to be shown in second
  *
  * @param {string} timeDuration Time duration of a video.
