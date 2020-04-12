@@ -75,6 +75,19 @@ function getChatLogURL() {
   return chatframeElem.src;
 }
 
+async function getChatJson(chatLogURL) {
+  const response = await fetch(chatLogURL);
+  const responseText = await response.text();
+  const domParser = new DOMParser();
+  const chatDoc = domParser.parseFromString(responseText, 'text/html');
+  const jsonText = chatDoc
+    .body
+    .getElementsByTagName('script')
+    .item(5)
+    .innerText.slice(31, -4);
+  return JSON.parse(jsonText);
+}
+
 /**
  * Return a chat-log URL based on reloadContinuationData to count chats from the
  * start point of video.
@@ -85,23 +98,18 @@ function getChatLogURL() {
  * @throws
  */
 async function getChatURLOnVideoStart(chatLogURL) {
-  const response = await fetch(chatLogURL);
-  const responseText = await response.text();
-  const domparser = new DOMParser();
-  const chatDoc = domparser.parseFromString(responseText, 'text/html');
-  const jsonText = chatDoc.body.getElementsByTagName('script').item(5).innerText.slice(31, -4);
-  const chatJson = JSON.parse(jsonText);
-  const continuation = chatJson.
-    continuationContents.
-    liveChatContinuation.
-    header.
-    liveChatHeaderRenderer.
-    viewSelector.
-    sortFilterSubMenuRenderer.
-    subMenuItems[0].
-    continuation.
-    reloadContinuationData.
-    continuation;
+  const chatJson = await getChatJson(chatLogURL);
+  const continuation = chatJson
+    .continuationContents
+    .liveChatContinuation
+    .header
+    .liveChatHeaderRenderer
+    .viewSelector
+    .sortFilterSubMenuRenderer
+    .subMenuItems[0]
+    .continuation
+    .reloadContinuationData
+    .continuation;
   return 'https://www.youtube.com/live_chat_replay?continuation=' + continuation;
 }
 

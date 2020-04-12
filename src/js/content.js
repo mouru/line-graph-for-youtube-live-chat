@@ -1,26 +1,37 @@
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.action == 'test-functions') {
+      // get initial parameters from a video page
       const playerElem = getPlayerElement();
-      console.log(playerElem);
       const videoWidth = getVideoWidth();
-      console.log(videoWidth);
       const progressVarWidth = getProgressBarWidth();
-      console.log(progressVarWidth);
-      const timeDuration = getTimeDuration();
-      console.log(timeDuration);
-      const chatLogURL = getChatLogURL();
-      console.log(chatLogURL);
+      const timeDurationMsec = getTimeDuration() * 1000;
+      let chatLogURL = getChatLogURL();
+      const bufNum = 61;
 
-      const testChart = new ChatLineChart('chat_line_graph', videoWidth, '120px', progressVarWidth, timeDuration, 60);
-      playerElem.appendChild(testChart.getBaseDiv());
-      const chart = testChart.drawChart();
-      console.log(chart);
+      // generate a chart element below a video player
+      const chartDivGenerator = new ChatLineChart(
+        'chat_line_graph',
+        videoWidth,
+        '120px',
+        progressVarWidth,
+        timeDurationMsec,
+        bufNum
+      );
+      playerElem.appendChild(chartDivGenerator.getBaseDiv());
 
-      // const div = document.createElement('div');
-      // div.appendChild(document.createTextNode('test'));
-      // const element = document.getElementById('player-container-outer').parentElement;
-      // element.parentNode.insertBefore(div, element.nextSibling);
+      // draw an initial chart
+      const chart = chartDivGenerator.drawChart();
+
+      (async () => {
+        try {
+          chatLogURL = await getChatURLOnVideoStart(chatLogURL);
+          const bufDurationMsec = Math.floor(timeDurationMsec / bufNum);
+          await tmpfunc(chatLogURL, bufDurationMsec, bufNum, chart);
+        } catch (e) {
+          console.log(e.message);
+        }
+      })();
     }
 
     sendResponse({ action: 'no response' });
